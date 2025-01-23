@@ -1,0 +1,131 @@
+{
+    "model_settings": {
+        "active_provider": "deepinfra",
+        "deepinfra": {
+            "model_name": "meta-llama/Meta-Llama-3.1-70B-Instruct",
+            "api_key": "",
+            "max_tokens": 2000,
+            "base_url": "https://api.deepinfra.com/v1/openai"
+        },
+        "openai": {
+            "model_name": "gpt-4",
+            "api_key": "sk-proj-",
+            "max_tokens": 2000,
+            "temperature": 0,
+            "base_url": "https://api.openai.com/v1"
+        },
+        "claude": {
+            "model_name": "claude-3-5-sonnet-20241022",
+            "api_key": "sk-ant-",
+            "max_tokens": 4000,
+            "temperature": 0
+        }
+    },
+    "modular_generation": {
+        "enabled": true,
+        "components": {
+            "dag_config": {
+                "max_tokens": 1000,
+                "temperature": 0
+            },
+            "tasks": {
+                "max_tokens": 1500,
+                "temperature": 0
+            },
+            "dependencies": {
+                "max_tokens": 500,
+                "temperature": 0
+            },
+            "assembly": {
+                "max_tokens": 2000,
+                "temperature": 0
+            }
+        },
+        "docker_based": true,
+        "output_format": "python"
+    }, 
+    "pipeline_settings": {
+        "input_file": "pipeline_description.txt",
+        "is_docker_based": true,
+        "output_directory": "outputs"
+    },
+    "evaluations": {
+        "llm_settings": {
+            "provider": "openai",
+            "openai": {
+                "model_name": "gpt-4",
+                "api_key": "sk-proj-",
+                "max_tokens": 150,
+                "temperature": 0
+            }
+        },
+        "code_quality": {
+            "enabled": true,
+            "weights": {
+                "syntax_and_validity": 0.15,
+                "code_readability": 0.20,
+                "modularity_and_reusability": 0.20,
+                "docker_configuration": 0.25,
+                "functional_completeness": 0.20
+            },
+            "iterations": 3,
+            "seed": 123,
+            "output_format": "json"
+        }, 
+        "static_analysis": {
+            "enabled": true,
+            "weights": {
+                "code_quality": 0.3,
+                "security": 0.3,
+                "complexity": 0.2,
+                "flake8": 0.2
+            },
+            "thresholds": {
+                "complexity_max": 10,
+                "maintainability_min": 65,
+                "security_issues_max": 0
+            },
+            "output_format": "json"
+        }, 
+        "dag_structure": {
+            "enabled": true,
+            "weights": {
+                "structure": 0.6,
+                "docker_config": 0.4
+            },
+            "thresholds": {
+                "min_tasks": 1,
+                "min_dependencies": 1,
+                "required_docker_configs": [
+                    "network_mode",
+                    "environment",
+                    "image"
+                ]
+            },
+            "output_format": "json"
+        }
+    },
+    "template_settings": {
+        "template_format": "yaml",
+        "include_docker": true,
+        "default_resource_limits": {
+            "cpu": 1,
+            "memory": "2G"
+        },
+        "default_retry_policy": {
+            "retries": 3,
+            "delay": "5 minutes"
+        }
+    },
+    "dag_settings": {
+        "docker_based": true,
+        "include_tests": true,
+        "output_format": "python",
+        "code_style": "pep8",
+        "include_documentation": true
+    },
+    "logging": {
+        "level": "INFO",
+        "log_file": "pipeline_generation.log"
+    }
+}

@@ -1,0 +1,8 @@
+openai
+anthropic
+python-dateutil
+radon
+pylint
+bandit
+flake8
+networkx

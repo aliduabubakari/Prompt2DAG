@@ -1,0 +1,12 @@
+2025-01-21 22:47:25,265 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-21 22:47:25,295 - root - INFO - Analysis saved to: outputs/pipeline_analysis_20250121_224725.txt
+2025-01-21 22:47:25,295 - root - INFO - Pipeline analysis completed successfully using openai
+2025-01-22 10:08:53,424 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-22 10:08:53,441 - root - INFO - Analysis saved to: outputs/pipeline_analysis_20250122_100853.txt
+2025-01-22 10:08:53,441 - root - INFO - Pipeline analysis completed successfully using openai
+2025-01-22 10:20:07,529 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-22 10:20:07,562 - root - INFO - Analysis saved to: outputs/pipeline_analysis_20250122_102007.txt
+2025-01-22 10:20:07,563 - root - INFO - Pipeline analysis completed successfully using openai
+2025-01-22 11:04:59,975 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-01-22 11:04:59,985 - root - INFO - Analysis saved to: outputs/pipeline_analysis_20250122_110459.txt
+2025-01-22 11:04:59,985 - root - INFO - Pipeline analysis completed successfully using openai

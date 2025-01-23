@@ -1,0 +1,85 @@
+Data Processing Pipeline Description
+
+This data processing pipeline is implemented as an Apache Airflow DAG, orchestrating a sequence of Docker-containerized tasks to transform, enrich, and save data. The pipeline operates with configurable parameters managed through environment variables and leverages a custom Docker network (app_network) for inter-service communication.
+
+Pipeline Steps:
+
+1. Load and Modify Data
+    • Objective: Load CSV files and prepare data for processing
+    • Technical Details:
+        - Input: Reads *.csv files from configured data directory
+        - Output: Generates table_data_{}.json
+        - API Integration: Connects to load-and-modify service (port 3003)
+        - Key Parameters:
+            * Dataset ID (configurable, default: 2)
+            * Date Column (default: Fecha_id)
+            * Table Name Format: JOT_{}
+    • Docker Image: i2t-backendwithintertwino6-load-and-modify:latest
+
+2. Data Reconciliation
+    • Objective: Standardize city-related data using HERE geocoding service
+    • Technical Details:
+        - Input: table_data_*.json
+        - Output: reconciled_table_{}.json
+        - API Integration: Connects to reconciliation service (port 3003)
+        - Reconciliation Parameters:
+            * Primary Column: City
+            * Optional Columns: County, Country
+            * Reconciliator ID: geocodingHere
+        - Authentication: Uses Intertwino API token
+    • Docker Image: i2t-backendwithintertwino6-reconciliation:latest
+
+3. OpenMeteo Data Extension
+    • Objective: Enrich data with weather information
+    • Technical Details:
+        - Input: reconciled_table_*.json
+        - Output: open_meteo_{}.json
+        - Weather Properties:
+            * Apparent temperature (max/min)
+            * Precipitation sum
+            * Precipitation hours
+        - Date Format: Configurable separator format
+    • Docker Image: i2t-backendwithintertwino6-openmeteo-extension:latest
+
+4. Column Extension
+    • Objective: Add supplementary data properties
+    • Technical Details:
+        - Input: open_meteo_*.json
+        - Output: column_extended_{}.json
+        - Extended Properties: id, name
+        - Extender ID: reconciledColumnExt
+    • Docker Image: i2t-backendwithintertwino6-column-extension:latest
+
+5. Save Final Data
+    • Objective: Convert and store final processed data
+    • Technical Details:
+        - Input: column_extended_*.json
+        - Output: enriched_data_{}.csv
+        - Storage: Configured data directory (/app/data)
+    • Docker Image: i2t-backendwithintertwino6-save:latest
+
+Infrastructure Configuration:
+
+1. Data Management:
+    • Shared Volume Mounting: All containers mount the same data directory
+    • Path Configuration: Configurable via DATA_DIR environment variable
+
+2. Network Configuration:
+    • Custom Docker Network: app_network
+    • Service Dependencies: Includes MongoDB and Intertwino API
+
+3. Security:
+    • API Authentication: Username/password for service access
+    • Secure Tokens: API token for external service integration
+
+4. Error Handling:
+    • Task Retries: Configurable through Airflow (default: 1 retry)
+    • Container Management: Auto-removal of containers after task completion
+
+5. Dependencies:
+    • External Services:
+        - Intertwino API (port 5005)
+        - MongoDB (port 27017)
+    • Service Authentication: Managed via environment variables
+
+This pipeline is implemented as a modular, containerized solution with comprehensive configuration options and robust integration with external services.
